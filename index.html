@@ -4,15 +4,76 @@
 <head>
   <meta charset="utf-8">
 
-  <title>The HTML5 Herald</title>
+  <title>Survey randomization</title>
   <meta name="description" content="forwards user to random website from parameters">
   
-   <script>
-  </script>
+	<script>
+		var urlParams = new URLSearchParams(document.location.search)
+		var links = urlParams.getAll('l')
+
+
+		function getRandomInt(min, max) {
+			min = Math.ceil(min);
+			max = Math.floor(max);
+			return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+
+		if(links.length != 0){
+			console.log(links)
+			var rand = getRandomInt(0, links.length - 1)
+			var forward_url = links[rand];
+			//document.location.href = forward_url;
+		}
+
+
+		function generateURL(){
+			var input_links = document.getElementsByTagName('input')
+			
+			var link = [];
+			for(var x=0;x<input_links.length;x++){
+				if(input_links[x].value != ""){
+					link.push('l='+encodeURIComponent(input_links[x].value));
+				}
+			}
+
+
+			var url = document.location.protocol + '//' + document.location.host + document.location.pathname + '?' + link.join('&');
+			if(url.length >= 2048){
+				url = 'URL is to long (over the 2048 character limit) use url shortener to make it shorter';
+			}
+			document.getElementById("link").innerHTML = url;
+			
+		}
+	</script>
 
 </head>
 
 <body>
- Forwarding to survey...
+	<div id="forwarding">
+		Forwarding to survey...
+	</div>
+
+	<div id="form" style="display:none;">
+		<h1>Tool to manage random url forwarding</h1>
+		<p>Enter the urls you want to forward to. Press Generate Link. That link can then be distributed and it will use javascript to randomly send visitors to one of the links.</p>
+		<p>URL 1:<input type="text" name="l2"></p>
+		<p>URL 2:<input type="text" name="l2"></p>
+		<p>URL 3:<input type="text" name="l2"></p>
+		<p>URL 4:<input type="text" name="l2"></p>
+		<p>URL 5:<input type="text" name="l2"></p>
+		<p>URL 6:<input type="text" name="l2"></p>
+		<p>URL 7:<input type="text" name="l2"></p>
+		<p>URL 8:<input type="text" name="l2"></p>
+		<button onclick="generateURL()">Generate Link</button>
+		<p id="link"></p>
+	</div>
+	<script>
+		if(links.length == 0){//Show form 
+			document.getElementById("form").style = "";
+			document.getElementById("forwarding").style.display = "none";
+		}else{
+			document.getElementById("forwarding").innerHTML = "forwarding to: <a href=\""+forward_url+"\">"+forward_url+"</a>";
+		}
+	</script>
 </body>
 </html>
