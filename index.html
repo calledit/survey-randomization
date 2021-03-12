@@ -5,7 +5,7 @@
   <meta charset="utf-8">
 
   <title>Survey randomization</title>
-  <meta name="description" content="forwards user to random website from parameters">
+  <meta name="description" content="redirects and forwards user to random website from parameters">
   
 	<script>
 		var urlParams = new URLSearchParams(document.location.search)
@@ -59,12 +59,12 @@
 
 <body>
 	<div id="forwarding">
-		Forwarding to survey...
+		Redirecting to survey...
 	</div>
 
 	<div id="form" style="display:none;">
-		<h1>Tool to manage random url forwarding</h1>
-		<p>Enter the urls you want to forward to. Press Generate Link. That link can then be distributed and it will use javascript to randomly send visitors to one of the links.</p>
+		<h1>Tool to manage random url redirecting</h1>
+		<p>Enter the urls you want to redirect to. Press Generate Link. That link can then be distributed and it will randomly send visitors to one of the websites assigned.</p>
 		<p>URL 1:<input type="text" name="l2"></p>
 		<p>URL 2:<input type="text" name="l2"></p>
 		<p>URL 3:<input type="text" name="l2"></p>
@@ -90,7 +90,7 @@ if(links.length == 0){//Show form
 	document.getElementById("form").style = "";
 	document.getElementById("forwarding").style.display = "none";
 }else{
-	document.getElementById("forwarding").innerHTML = "forwarding to: <a id=\"url\" href=\"url\">url</a>";
+	document.getElementById("forwarding").innerHTML = "Redirecting to: <a id=\"url\" href=\"url\">url</a>";
 	document.getElementById("url").href = forward_url;
 	document.getElementById("url").textContent = forward_url;
 }
