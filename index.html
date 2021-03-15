@@ -134,7 +134,7 @@ function injectScript(src) {
 		const script = document.createElement('script');
 		script.src = src;
 		script.addEventListener('load', resolve);
-		script.addEventListener('error', e => reject(e.error));
+		script.addEventListener('error', function(e){reject(e.error)});
 		document.head.appendChild(script);
 	});
 }
