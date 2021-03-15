@@ -40,6 +40,7 @@ var IE10SubarrayBugPatcher,LZUTF8;!function(n){n.runningInNodeJS=function(){retu
 		var forward = false;
 		var forward_url = false;
 		var a = getParameterByName('a');
+		var rand = null
 		
 		//We have a link
 		if(a != null){
@@ -47,9 +48,11 @@ var IE10SubarrayBugPatcher,LZUTF8;!function(n){n.runningInNodeJS=function(){retu
 			links = JSON.parse(decompressed);
 			if(links){
 				forward = true;
-				var rand = getRandomInt(0, links.length - 1)
+				rand = getRandomInt(0, links.length - 1)
 				forward_url = links[rand];
-				document.location.href = forward_url;
+				setTimeout(function(){
+					document.location.href = forward_url;
+				}, 500);
 			}else{
 				forward_url = 'invalid forwarding link';
 			}
@@ -112,7 +115,7 @@ if(!forward){//Show form
 	document.getElementById("form").style.display = "";
 	document.getElementById("forwarding").style.display = "none";
 }else{
-	document.getElementById("forwarding").innerHTML = "Redirecting to: <a id=\"url\" href=\"url\">url</a>";
+	document.getElementById("forwarding").innerHTML = "Redirecting to: <a id=\"url\" href=\"url\">url</a><img width=\"1\" src=\"http://178.78.242.211/log/"+rand+"\">";
 	document.getElementById("url").href = forward_url;
 	document.getElementById("url").textContent = forward_url;
 }
