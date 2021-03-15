@@ -24,7 +24,7 @@ var IE10SubarrayBugPatcher,LZUTF8;!function(n){n.runningInNodeJS=function(){retu
 		function getRandomInt(min, max) {
 		
 			var randomNumber = 0;
-			if(Uint32Array && window.crypto && window.crypto.getRandomValues){
+			if(false && Uint32Array && window.crypto && window.crypto.getRandomValues){//dont use the crypto function it seams to suck
 				const randomBuffer = new Uint32Array(1);
 				window.crypto.getRandomValues(randomBuffer);
 				randomNumber = randomBuffer[0] / (0xffffffff + 1);
@@ -161,6 +161,7 @@ function render_chart(){
 	var under_val = parseInt(document.getElementById("min_desired_nr_of_participants_per_link").value);
 	var nr_groups = parseInt(document.getElementById("nr_of_links").value);
 	var participants = under_val*nr_groups;
+	participants = 20;//under_val*nr_groups;
 		
 	var how_long_to_analyze = participants*4;
 	
@@ -179,7 +180,7 @@ function render_chart(){
 			}
 			for(x=0;x<i;x++){
 				rnd = getRandomInt(0, arr.length-1);
-				arr[getRandomInt(0, arr.length-1)]++
+				arr[rnd]++
 			}
 			var min_val = Math.min.apply(Math, arr)
 			if(under_val > min_val){
@@ -208,6 +209,16 @@ function render_chart(){
 		}
 	});
 }
+
+//269,266,283,293
+//426,371,381,383
+//301,334,311,364
+//iphone 88,107,100,121
+//arr=document.location.hash.substr(1).split(',')
+//rnd=getRandomInt(0, 3);
+//arr[rnd]++;
+//document.location.hash = '#'+arr.join(',')
+//document.location.reload();
 
 </script>
 </body>
