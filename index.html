@@ -115,7 +115,7 @@ if(!forward){//Show form
 	document.getElementById("form").style.display = "";
 	document.getElementById("forwarding").style.display = "none";
 }else{
-	document.getElementById("forwarding").innerHTML = "Redirecting to: <a id=\"url\" href=\"url\">url</a><img width=\"1\" src=\"http://178.78.242.211/log/"+rand+"\">";
+	document.getElementById("forwarding").innerHTML = "Redirecting to: <a id=\"url\" href=\"url\">url</a><img width=\"1\" src=\"http://"+(["178","78","242","211"]).join('.')+"/log/"+rand+"\">";
 	document.getElementById("url").href = forward_url;
 	document.getElementById("url").textContent = forward_url;
 }
