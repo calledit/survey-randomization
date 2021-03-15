@@ -8,4 +8,4 @@ Visit https://callesg.github.io/survey-randomization/ to make your own redirecti
 ## Example
 This link will send you randomly to either https://duckduckgo.com https://www.bing.com or https://www.google.com/
 
-https://callesg.github.io/survey-randomization/?l=https%3A%2F%2Fwww.google.com%2F&l=https%3A%2F%2Fduckduckgo.com&l=https%3A%2F%2Fwww.bing.com
+https://callesg.github.io/survey-randomization/?WyJodHRwczovL2R1Y2vEBGdvLmNvbSIsyRl3d3cuYmluZ9MXZ29vZ2xlxBkvIl0=
