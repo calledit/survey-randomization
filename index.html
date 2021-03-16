@@ -21,13 +21,25 @@ var IE10SubarrayBugPatcher,LZUTF8;!function(n){n.runningInNodeJS=function(){retu
 			return decodeURIComponent(results[2].replace(/\+/g, ' '));
 		}
 
-		function getRandomInt(min, max) {
+		function getRandomInt(min, max, secure) {
 		
 			var randomNumber = 0;
-			if(false && Uint32Array && window.crypto && window.crypto.getRandomValues){//dont use the crypto function it seams to suck
-				const randomBuffer = new Uint32Array(1);
-				window.crypto.getRandomValues(randomBuffer);
-				randomNumber = randomBuffer[0] / (0xffffffff + 1);
+
+			var spins = 0;
+			
+			if(secure){
+				//We play with the random number generator cause apparently in some browsers it generates garbage like having massive preferences for certain number spans...
+				var load_second = (new Date()).getSeconds();
+				while(spins < 2 || load_second == (new Date()).getSeconds()){
+					if(false && Uint32Array && window.crypto && window.crypto.getRandomValues){//dont use the crypto function it seams to suck
+						const randomBuffer = new Uint32Array(1);
+						window.crypto.getRandomValues(randomBuffer);
+						randomNumber = randomBuffer[0] / (0xffffffff + 1);
+					}else{
+						randomNumber = Math.random();
+					}
+					spins++;
+				}
 			}else{
 				randomNumber = Math.random();
 			}
@@ -48,7 +60,7 @@ var IE10SubarrayBugPatcher,LZUTF8;!function(n){n.runningInNodeJS=function(){retu
 			links = JSON.parse(decompressed);
 			if(links){
 				forward = true;
-				rand = getRandomInt(0, links.length - 1)
+				rand = getRandomInt(0, links.length - 1, true)
 				forward_url = links[rand];
 				setTimeout(function(){
 					document.location.href = forward_url;
@@ -104,6 +116,7 @@ var IE10SubarrayBugPatcher,LZUTF8;!function(n){n.runningInNodeJS=function(){retu
 			<h4>Use this if you want to calculate how many participants you will need to get a certain likelihood of having a minimum number of participants visit each link.</h4>
 			<p>Number of links: <input type="text" id="nr_of_links" value="4"></p>
 			<p>Minimum nr of participants per link: <input type="text" id="min_desired_nr_of_participants_per_link" value="8"></p>
+			<p>Maximum nr of participants to a link: <input type="text" id="max_desired_nr_of_participants_to_a_link" value="20"></p>
 			<button onclick="load_render_chart()">Show statistics</button>
 		</div>
 	</div>
@@ -162,44 +175,70 @@ function load_render_chart(){
 
 function render_chart(){
 	var under_val = parseInt(document.getElementById("min_desired_nr_of_participants_per_link").value);
+	var over_val = parseInt(document.getElementById("max_desired_nr_of_participants_to_a_link").value);
 	var nr_groups = parseInt(document.getElementById("nr_of_links").value);
-	var participants = under_val*nr_groups;
-	participants = 20;//under_val*nr_groups;
+	var participants = under_val*nr_groups-2;
 		
-	var how_long_to_analyze = participants*4;
+	var how_long_to_analyze = participants*2;
 	
 	var smothing = 10;
 	
 	parts = ['participants'];
 	dt = ['likelihood of getting under '+under_val+' partifipants in a group'];
-
+	dtov = ['likelihood of getting over '+over_val+' partifipants in a group'];
 	
 	for(i=participants;i<participants+how_long_to_analyze;i++){
 		var hits_under_val = 0;
+		var hits_over_val = 0;
 		for(y=0;y<100*smothing;y++){
 			arr=[];
 			for(h=0;h<nr_groups;h++){
 				arr.push(0);
 			}
 			for(x=0;x<i;x++){
-				rnd = getRandomInt(0, arr.length-1);
+				rnd = getRandomInt(0, arr.length-1, false);
 				arr[rnd]++
 			}
 			var min_val = Math.min.apply(Math, arr)
 			if(under_val > min_val){
 				hits_under_val++;
 			}
+			var max_val = Math.max.apply(Math, arr)
+			if(over_val < max_val){
+				hits_over_val++;
+			}
 		}
 		parts.push(i);
 		dt.push(hits_under_val/smothing);
+		dtov.push(hits_over_val/smothing);
 	}
 
+
+/*
+	smothing = 10000
+	var num = 4;
+	dt = ['random'];
+	for(y=0;y<num*smothing;y++){
+		var rnd = getRandomInt(0, num-1, false);
+		if(typeof(dt[rnd+1]) == 'undefined'){
+			dt[rnd+1] = 0;
+		}
+		dt[rnd+1]++;
+	}
+	for(y=0;y<num;y++){
+		dt[y+1] = dt[y+1]/smothing;
+		//console.log(y+1)
+		
+	}
+//console.log(dt)
+*/
 	var chart = c3.generate({
 		data: {
 			x: 'participants',
 			columns: [
 				parts,
-				dt
+				dt,
+				dtov
 			]
 		},
 		axis:{
@@ -218,7 +257,7 @@ function render_chart(){
 //301,334,311,364
 //iphone 88,107,100,121
 //arr=document.location.hash.substr(1).split(',')
-//rnd=getRandomInt(0, 3);
+//rnd=getRandomInt(0, 3, false);
 //arr[rnd]++;
 //document.location.hash = '#'+arr.join(',')
 //document.location.reload();
