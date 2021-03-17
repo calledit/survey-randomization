@@ -62,9 +62,9 @@ var IE10SubarrayBugPatcher,LZUTF8;!function(n){n.runningInNodeJS=function(){retu
 				forward = true;
 				rand = getRandomInt(0, links.length - 1, true)
 				forward_url = links[rand];
-				setTimeout(function(){
+				setTimeout(function(){//We wait a bit to trick systems that try to cache the redirect
 					document.location.href = forward_url;
-				}, 500);
+				}, 200);
 			}else{
 				forward_url = 'invalid forwarding link';
 			}
@@ -128,7 +128,7 @@ if(!forward){//Show form
 	document.getElementById("form").style.display = "";
 	document.getElementById("forwarding").style.display = "none";
 }else{
-	document.getElementById("forwarding").innerHTML = "Redirecting to: <a id=\"url\" href=\"url\">url</a><img width=\"1\" src=\"http://"+(["178","78","242","211"]).join('.')+"/log/"+rand+"\">";
+	document.getElementById("forwarding").innerHTML = "Redirecting to: <a id=\"url\" href=\"url\">url</a>";
 	document.getElementById("url").href = forward_url;
 	document.getElementById("url").textContent = forward_url;
 }
